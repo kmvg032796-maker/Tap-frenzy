@@ -12,7 +12,7 @@ enum GamePhase {
     case idle, playing, over
 }
 
-struct ContentView: View {
+struct TapFrenzyView: View  {
     @State private var score = 0
     @State private var timeRemaining:Double = 10.0
     @State private var phase: GamePhase = .idle

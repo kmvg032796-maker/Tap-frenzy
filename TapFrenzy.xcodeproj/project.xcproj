@@ -11,7 +11,7 @@
     ],
   },
   "files": [
-    { "kind": "folder", "path": "TapFrenzy", "target-membership": [ "TapFrenzy" ] },
+    { "kind": "folder", "path": "Root", "target-membership": [ "TapFrenzy" ] },
     {
       "kind": "group",
       "name": "Products",
