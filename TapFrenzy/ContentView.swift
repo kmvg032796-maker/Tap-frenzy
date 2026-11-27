@@ -14,36 +14,42 @@ enum GamePhase {
 
 struct ContentView: View {
     @State private var score = 0
-    @State private var timeRemaining = 10
+    @State private var timeRemaining:Double = 10.0
     @State private var phase: GamePhase = .idle
     @State private var isNewBestScore = false
     @AppStorage("highScore") private var highScore = 0
 
-    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    let timer = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
 
     var body: some View {
         ZStack {
             Color.black
                 .ignoresSafeArea()
-
+            
             VStack(spacing: 40) {
                 Text("Tap Frenzy")
                     .font(.largeTitle)
                     .fontWeight(.black)
                     .foregroundStyle(.white)
-
+                
                 if phase == .idle || phase == .playing {
                     // 1. Score Label
                     Text("\(score)")
                         .font(.system(size: 80, weight: .heavy))
                         .foregroundStyle(.white)
-
+                    
                     // 2. Timer Label
-                    Text("Time: \(timeRemaining)s")
+                    Text("Time: \(String(format: "%.1f", timeRemaining))s")
                         .font(.title2)
                         .fontWeight(.semibold)
                         .foregroundStyle(.gray)
-
+                    
+                    // 3. Timer Progress Bar
+                    ProgressView(value: timeRemaining, total: 10)
+                        .tint(timeRemaining > 5 ? .green : timeRemaining > 2 ? .orange : .red)
+                        .frame(width: 250)
+                        .scaleEffect(y: 3)
+                    
                     // 3. Big Circular Tap Button
                     Button(action: handleTap) {
                         Text(phase == .idle ? "START" : "TAP")
@@ -62,18 +68,18 @@ struct ContentView: View {
                             .font(.largeTitle)
                             .fontWeight(.bold)
                             .foregroundStyle(.white)
-
+                        
                         if isNewBestScore {
                             Text("New Best Score!")
                                 .font(.title3)
                                 .fontWeight(.bold)
                                 .foregroundStyle(.yellow)
                         }
-
+                        
                         Text("\(score)")
                             .font(.system(size: 80, weight: .heavy))
                             .foregroundStyle(.white)
-
+                        
                         Text("Best: \(highScore)")
                             .font(.title2)
                             .fontWeight(.semibold)
@@ -83,7 +89,7 @@ struct ContentView: View {
                             .font(.title2)
                             .fontWeight(.semibold)
                             .foregroundStyle(.orange)
-
+                        
                         Button("Play Again", action: resetGame)
                             .font(.headline)
                             .foregroundStyle(.white)
@@ -99,10 +105,12 @@ struct ContentView: View {
         }
         .onReceive(timer) { _ in
             guard phase == .playing else { return }
-
-            if timeRemaining > 1 {
-                timeRemaining -= 1
-            } else {
+            
+            if timeRemaining > 0 {
+                timeRemaining -= 0.1
+            }
+            
+            if timeRemaining <= 0 {
                 timeRemaining = 0
                 endGame()
             }
@@ -128,7 +136,7 @@ struct ContentView: View {
 
     private func resetGame() {
         score = 0
-        timeRemaining = 10
+        timeRemaining = 10.0
         isNewBestScore = false
         phase = .idle
     }
