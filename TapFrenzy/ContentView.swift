@@ -33,24 +33,24 @@ struct ContentView: View {
                     .foregroundStyle(.white)
                 
                 if phase == .idle || phase == .playing {
-                    // 1. Score Label
+                
                     Text("\(score)")
                         .font(.system(size: 80, weight: .heavy))
                         .foregroundStyle(.white)
                     
-                    // 2. Timer Label
+                
                     Text("Time: \(String(format: "%.1f", timeRemaining))s")
                         .font(.title2)
                         .fontWeight(.semibold)
                         .foregroundStyle(.gray)
                     
-                    // 3. Timer Progress Bar
+                
                     ProgressView(value: timeRemaining, total: 10)
                         .tint(timeRemaining > 5 ? .green : timeRemaining > 2 ? .orange : .red)
                         .frame(width: 250)
                         .scaleEffect(y: 3)
                     
-                    // 3. Big Circular Tap Button
+                    
                     Button(action: handleTap) {
                         Text(phase == .idle ? "START" : "TAP")
                             .font(.title)
@@ -62,7 +62,7 @@ struct ContentView: View {
                             .shadow(radius: 10)
                     }
                 } else {
-                    // Game-Over View
+                
                     VStack(spacing: 20) {
                         Text("Time's Up!")
                             .font(.largeTitle)
